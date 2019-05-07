@@ -117,9 +117,6 @@ class Axl_network(nx.Graph, C.Structure):
         """ 
 	Evolution to convergence: the system evolves until there is no active links, checking this by check_steps. Noise must be equal to zero.
         """
-        if self.noise > 0.00:
-            return "Convergence cannot be reached with noise in the system"
-
         steps = 0
     	while self.active_links() != 0:
             self.evolution(check_steps)
