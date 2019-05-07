@@ -11,3 +11,5 @@ mysys = Axl_network(n = N, f = F, q = q, topology = 'lattice')
 mysys.evol2convergence()
 
 print mysys.biggest_fragment()['size']
+
+mysys.save_fragments_distribution('frag.dat')

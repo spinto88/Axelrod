@@ -26,6 +26,10 @@ class Axl_network(nx.Graph, C.Structure):
         nx.empty_graph(n, self)
         self.nagents = n
 
+        # Model parameters
+        self.f = f
+        self.q = q
+
         # Init agents' states
         self.init_agents(f, q)
 
@@ -88,7 +92,7 @@ class Axl_network(nx.Graph, C.Structure):
         # After this, the vector labels has the label of each agent
         from collections import defaultdict
         labels_size = defaultdict(int)
-        for i in range(0, n):
+        for i in range(n):
             labels_size[self.agent[i].label] += 1
         
 	return labels_size
@@ -134,97 +138,12 @@ class Axl_network(nx.Graph, C.Structure):
 
         return np.mean(homophilies)
 
-    
+    def save_fragments_distribution(self, fname):
 
-    def image_opinion(self, fname = '', conf = ''):
-        """
-        This method prints on screen the matrix of first features, of course the system is a square lattice.
-        It is not confident if q is larger than 63.
-        If fname is different of the null string, the matrix is save in a file with that name. This one can be loaded by numpy.loadtxt(fname).
-        """
-        if self.id_topology < 3.2:
+        fragment_sizes = [d[1] for d in self.fragments().items()]
 
-            import matplotlib.pyplot as plt
-
-            N = self.nagents
-            n = int(N ** 0.5)
-            q_z = self.q_z
-            matrix = []
-            for i in range(0, n):
-                row = []
-                for j in range(0, n):
-                    row.append(self.agent[(j + (i*n))].opinion)
-                matrix.append(row)
-
-            if fname != '':
-                np.savetxt(fname + '.txt', matrix)
-
-            plt.ion()
-            figure = plt.figure(1)
-            figure.clf()
-            if(conf != ''):
-                label = str(conf)
-                ax = figure.add_subplot(111)
-                ax.text(2, 6, label , bbox={'facecolor':'white', 'alpha':0.8, 'pad':10}, fontsize=15)
-            plt.imshow(matrix, interpolation = 'nearest', vmin = 0, vmax = q_z)
-            plt.colorbar()
-            if fname != '':
-                plt.savefig(fname + '.png', bbox_inches='tight')
-            else:
-                figure.canvas.draw()
-
-        else:
-            print "The system's network is not a square lattice"
-            pass
-    
-        
-    def image_vaccinated(self, fname = '', conf = ''):
-        """
-        This method prints on screen the matrix of vaccinated agents, of course the system is a square lattice.
-        It is not confident if q is larger than 63.
-        If fname is different of the null string, the matrix is save in a file with that name. This one can be loaded by numpy.loadtxt(fname).
-        """
-        if self.id_topology < 3.2:
-
-            import matplotlib.pyplot as plt
-            from matplotlib import colors
-
-            N = self.nagents
-            n = int(N ** 0.5)
-            q_z = self.q_z
-            matrix = []
-            for i in range(0, n):
-                row = []
-                for j in range(0, n):
-                    row.append(self.agent[(j + (i*n))].vaccine)
-                matrix.append(row)
-
-            if fname != '':
-                np.savetxt(fname + '.txt', matrix)
-
-            plt.ion()
-            cmap = colors.ListedColormap(['red', 'green'])
-            bounds=[0, 0.1, 1]
-            norm = colors.BoundaryNorm(bounds, cmap.N)
-
-            figure = plt.figure(2)
-            figure.clf()
-            if(conf != ''):
-                label = str(conf)
-                ax = figure.add_subplot(111)
-                ax.text(2, 6, label , bbox={'facecolor':'white', 'alpha':0.8, 'pad':10}, fontsize=15)
-            cmap = colors.ListedColormap(['red', 'green'])
-            bounds=[0, 0.1, 1]
-
-            plt.imshow(matrix, interpolation = 'nearest', cmap = cmap, norm = norm)
-
-            plt.colorbar(cmap=cmap, norm=norm, boundaries=bounds, ticks=[0, 1])
-
-            if fname != '':
-                plt.savefig(fname + '.png', bbox_inches='tight')
-            else:
-                figure.canvas.draw()
-
-        else:
-            print "The system's network is not a square lattice"
-            pass  
+        fp = open(fname, 'a')
+        fp.write('{},{},'.format(self.f, self.q))
+        fp.write(', '.join([str(s) for s in fragment_sizes]))
+        fp.write('\n')
+        fp.close()
