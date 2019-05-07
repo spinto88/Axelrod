@@ -1,0 +1,9 @@
+*.so
+*.o
+*.pyc
+*~
+prueba*
+nohup*
+data*
+*txt
+
