@@ -2,21 +2,42 @@
 
 void evolution(axl_network *mysys)
 {
-	int i, j, r, aux_int;	
+	int i, j, k, r, neighbour;	
 	int step_n;
         double h_ab, random;
+	int n_active_links;
+	active_link *active_links;
 
 	/* Set the random seed */
 	srand(mysys->seed);
+
+	/* Look for active links */
+	n_active_links = number_of_active_links(mysys);
+
+	active_links = (active_link *)malloc(n_active_links * sizeof(active_link));
+
+	k = 0;
+	for(i = 0; i < mysys->nagents; i++)
+	{
+		for(j = 0; j < mysys->agent[i].degree; j++)
+		{
+			neighbour = mysys->agent[i].neighbors[j];
+			if(active_condition(mysys->agent[i], mysys->agent[neighbour]))
+			{
+				active_links[k].source = i;
+				active_links[k].target = neighbour;
+				k++;
+			}
+		}
+	}
 	
-	for(step_n = 0; step_n < mysys->nagents; step_n++)
+	for(step_n = 0; step_n < n_active_links; step_n++)
 	{
 		/* Choose a random agent */
-		i = rand() % mysys->nagents;
+		k = rand() % n_active_links;
 
-		/* Choose a random neighbour of i */
-		aux_int = rand() % mysys->agent[i].degree;
-       		j = mysys->agent[i].neighbors[aux_int];
+		i = active_links[k].source;
+		j = active_links[k].target;
 
 		/* Compute the homophily */
 		h_ab = homophily(mysys->agent[i], mysys->agent[j]);
@@ -25,7 +46,7 @@ void evolution(axl_network *mysys)
     		random = (((double)rand())/RAND_MAX);
 
 		/* If the interaction takes place, go into the next if */
-	 	if((random < h_ab) && (h_ab != 1.00))
+	 	if((random < h_ab) && (active_condition(mysys->agent[i], mysys->agent[j])))
 		{
 			/* Take a random feature */
 			r = rand() % mysys->agent[i].f;
@@ -40,6 +61,7 @@ void evolution(axl_network *mysys)
 
 		mysys->seed = rand();
 	}
+	free(active_links);
 
 	return;
 }
