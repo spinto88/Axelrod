@@ -5,7 +5,7 @@
 #include "homophily.h"
 
 void swap(int*, int*);
-int is_same_state(axl_agent, axl_agent);
+int non_zero_hom(axl_agent, axl_agent);
 int is_neighbour(axl_network *, int, int);
 void fragment_identifier(axl_network *);
 

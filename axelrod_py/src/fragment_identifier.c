@@ -15,12 +15,12 @@ void swap(int *px, int *py)
 }
 
 
-int is_same_state(axl_agent a, axl_agent b)
+int non_zero_hom(axl_agent a, axl_agent b)
 {
-	if(homophily(a, b) != 1.00)
-		return 0;
-	else
+	if(homophily(a, b) != 0.00)
 		return 1;
+	else
+		return 0;
 }
 
 int is_neighbour(axl_network* mysys, int i, int j)
@@ -79,7 +79,7 @@ void fragment_identifier(axl_network *mysys)
 			// Node 2 is the node which we compare with node 1
   			node2 = ordering[k];
 			
-			if((is_neighbour(mysys, node1, node2)) && (is_same_state(mysys->agent[node1], mysys->agent[node2])))
+			if((is_neighbour(mysys, node1, node2)) && (non_zero_hom(mysys->agent[node1], mysys->agent[node2])))
 			// It means: if node2 is a neighbor of node1 and they have the same state, so... 			
 			{					
                                                 // Label of node 2 becomes the same as the node 1's label

@@ -1,7 +1,7 @@
 import networkx as nx
 import warnings
 
-def set_topology(G, topology):
+def set_topology(G, topology, **kwargs):
  
     # Reset the graph
     for edge in G.edges():
@@ -26,3 +26,12 @@ def set_topology(G, topology):
  	    aux_graph = nx.grid_2d_graph(int(side_nodes), int(side_nodes), periodic = True)
             A = nx.adjacency_matrix(aux_graph)
    	    nx.from_numpy_array(A.toarray(), create_using = G)
+
+    elif topology == 'random_regular':
+	"""
+	Random regular network with mean degree
+	"""
+	aux_graph = nx.random_regular_graph(kwargs['degree'], number_of_nodes)
+
+        A = nx.adjacency_matrix(aux_graph)
+   	nx.from_numpy_array(A.toarray(), create_using = G)

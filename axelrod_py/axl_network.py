@@ -16,7 +16,7 @@ class Axl_network(nx.Graph, C.Structure):
                 ('agent', C.POINTER(Axl_agent)),
 		('seed', C.c_int)]
 
-    def __init__(self, n, f, q, topology = 'complete'):
+    def __init__(self, n, f, q, topology = 'complete', **kwargs):
         
 	"""
         Constructor: initializes the network.Graph first, and set the topology and the agents' states. 
@@ -34,12 +34,12 @@ class Axl_network(nx.Graph, C.Structure):
         self.init_agents(f, q)
  
         # Init topology
-        self.set_topology(topology)
+        self.set_topology(topology, **kwargs)
 
 	# Random seed 
 	self.seed = rand.randint(0, 10000)
 
-    def set_topology(self, topology):
+    def set_topology(self, topology, **kwargs):
         """
         Set the network's topology
         """
@@ -47,7 +47,7 @@ class Axl_network(nx.Graph, C.Structure):
 
         self.id_topology = topology
 
-        setop.set_topology(self, topology)
+        setop.set_topology(self, topology, **kwargs)
 
         for i in range(self.nagents):
 

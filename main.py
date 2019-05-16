@@ -1,12 +1,12 @@
 from axelrod_py import *
 
-N = 1024
+N = 100
 F = 10
-q = 20
+q = 60
 
 rand.seed(123457)
 
-mysys = Axl_network(n = N, f = F, q = q, topology = 'lattice')
+mysys = Axl_network(n = N, f = F, q = q, topology = 'random_regular', degree = 16)
 
 mysys.evol2convergence()
 
