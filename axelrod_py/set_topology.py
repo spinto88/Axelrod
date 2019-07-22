@@ -35,3 +35,9 @@ def set_topology(G, topology, **kwargs):
 
         A = nx.adjacency_matrix(aux_graph)
    	nx.from_numpy_array(A.toarray(), create_using = G)
+
+    elif topology == 'cycle':
+	"""
+	Cycle network
+	"""
+   	nx.cycle_graph(number_of_nodes, create_using = G)
