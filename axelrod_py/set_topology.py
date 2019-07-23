@@ -31,13 +31,17 @@ def set_topology(G, topology, **kwargs):
 	"""
 	Random regular network with mean degree
 	"""
-	aux_graph = nx.random_regular_graph(kwargs['degree'], number_of_nodes)
+	if kwargs['degree'] != 2:
 
-        A = nx.adjacency_matrix(aux_graph)
-   	nx.from_numpy_array(A.toarray(), create_using = G)
+   	    aux_graph = nx.random_regular_graph(kwargs['degree'], number_of_nodes)
 
-    elif topology == 'cycle':
-	"""
-	Cycle network
-	"""
-   	nx.cycle_graph(number_of_nodes, create_using = G)
+            A = nx.adjacency_matrix(aux_graph)
+   	    nx.from_numpy_array(A.toarray(), create_using = G)
+
+        else:
+	    """
+  	    Cycle network
+	    """
+   	    nx.cycle_graph(number_of_nodes, create_using = G)
+
+        
