@@ -9,13 +9,7 @@ def set_topology(G, topology, **kwargs):
 
     number_of_nodes = G.number_of_nodes()
 
-    if topology == 'complete':
-        """ 
-	Complete graph.
-	"""
-        nx.complete_graph(number_of_nodes, G)
-
-    elif topology == 'lattice':
+    if topology == 'lattice':
 	"""
 	2D lattice with periodic bounded conditions
 	"""
@@ -31,17 +25,21 @@ def set_topology(G, topology, **kwargs):
 	"""
 	Random regular network with mean degree
 	"""
-	if kwargs['degree'] != 2:
+	if kwargs['degree'] != 2 and kwargs['degree'] != number_of_nodes:
 
    	    aux_graph = nx.random_regular_graph(kwargs['degree'], number_of_nodes)
 
             A = nx.adjacency_matrix(aux_graph)
    	    nx.from_numpy_array(A.toarray(), create_using = G)
 
-        else:
+	elif kwargs['degree'] == number_of_nodes:
+            """ 
+   	    Complete graph.
+	    """
+            nx.complete_graph(number_of_nodes, G)
+
+        elif kwargs['degree'] == 2:
 	    """
   	    Cycle network
 	    """
-   	    nx.cycle_graph(number_of_nodes, create_using = G)
-
-        
+   	    nx.cycle_graph(number_of_nodes, create_using = G)        
