@@ -112,6 +112,28 @@ class Axl_network(nx.Graph, C.Structure):
 
 	return libc.active_links(self)
 
+    def effective_graph(self):
+
+        graph = nx.empty_graph(self.nagents)
+        graph.add_edges_from([e for e in self.edges if self.agent[e[0]].homophily(self.agent[e[1]]) != 0])
+
+        return graph
+
+    def homophily_graph(self):
+
+        from itertools import combinations
+
+        graph = nx.empty_graph(self.nagents)
+        graph.add_edges_from([e for e in combinations(range(self.nagents), 2) if self.agent[e[0]].homophily(self.agent[e[1]]) != 0])
+
+        return graph
+
+    def physical_graph(self):
+
+        graph = nx.empty_graph(self.nagents)
+        graph.add_edges_from([e for e in self.edges])
+
+        return graph
 
     def evol2convergence(self, check_steps = 1000):
         """ 
@@ -124,6 +146,19 @@ class Axl_network(nx.Graph, C.Structure):
             steps += check_steps
 
 	return steps
+
+    def pairs_with_hom(self):
+
+        homophilies = [self.agent[i].homophily(self.agent[j]) \
+                       for i in range(self.nagents) for j in range(i+1, self.nagents)]
+        return len(filter(lambda x: x > 0.00, homophilies))
+        
+    def physical_links_with_hom(self):
+
+        homophilies = [self.agent[i].homophily(self.agent[j]) \
+                       for i in range(self.nagents) for j in self.neighbors(i)]
+
+        return len(filter(lambda x: x > 0.00, homophilies))
 
     def mean_homophily(self):
 

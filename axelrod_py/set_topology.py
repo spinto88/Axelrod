@@ -43,3 +43,12 @@ def set_topology(G, topology, **kwargs):
   	    Cycle network
 	    """
    	    nx.cycle_graph(number_of_nodes, create_using = G)        
+
+    elif topology == 'triplet':
+    
+        G.add_edge(0,1)
+        G.add_edge(1,2)
+
+    elif topology == 'duo':
+    
+        G.add_edge(0,1)
