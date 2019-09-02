@@ -34,7 +34,7 @@ int is_neighbour(axl_network* mysys, int i, int j)
 	return 0;
 }
 
-void fragment_identifier(axl_network *mysys, int type)
+void fragment_identifier(axl_network *mysys)
 {
 
 	/* =================================================
