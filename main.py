@@ -6,7 +6,7 @@ q = 60
 
 rand.seed(123457)
 
-mysys = Axl_network(n = N, f = F, q = q, topology = 'cycle', degree = 16)
+mysys = Axl_network(n = N, f = F, q = q, topology = 'random_regular', degree = 4)
 
 mysys.evol2convergence()
 
