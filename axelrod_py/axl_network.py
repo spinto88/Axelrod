@@ -62,6 +62,11 @@ class Axl_network(nx.Graph, C.Structure):
     
         for i in range(self.nagents):
             self.agent[i] = Axl_agent(f, q)
+    
+    def re_init_agents(self, f, q):
+
+        for i in range(self.nagents):
+            self.agent[i].__init__(f,q)
 
     def evolution(self, steps = 1):
         """
@@ -131,6 +136,20 @@ class Axl_network(nx.Graph, C.Structure):
                        for i in range(self.nagents) for j in range(i+1, self.nagents)]
 
         return np.mean(homophilies)
+
+    def hom_different_to_zero(self):
+
+        homophilies = np.array([1 if self.agent[i].homophily(self.agent[j]) > 0.00 \
+		else 0 for i in range(self.nagents) for j in range(i+1, self.nagents)], dtype = np.int)
+
+        return np.count_nonzero(homophilies)
+
+    def physical_different_to_zero(self):
+
+        homophilies = np.array([1 if self.agent[i].homophily(self.agent[j]) > 0.00 \
+		else 0 for i in range(self.nagents) for j in self.neighbors(i)], dtype = np.int)
+
+        return np.count_nonzero(homophilies)
 
     def save_fragments_distribution(self, fname):
 

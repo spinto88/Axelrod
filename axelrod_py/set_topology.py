@@ -43,3 +43,4 @@ def set_topology(G, topology, **kwargs):
   	    Cycle network
 	    """
    	    nx.cycle_graph(number_of_nodes, create_using = G)        
+
